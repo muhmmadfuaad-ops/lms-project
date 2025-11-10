@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Param, NotFoundException } from '@nestjs/common';
+import { Controller, Get, Post, Delete, Body, Param, NotFoundException } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { User } from './interfaces/user.interface';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -12,15 +12,16 @@ export class UsersController {
       return this.usersService.findAll();
     }
 
-    // @Get(':id')
-    // async findOne(@Param('id') id: string): Promise<User> {
-    //   const user = this.usersService.findOne(Number(id));
-    //   if (!user) throw new NotFoundException(`User with id ${id} not found`);
-    //   return user;
-    // }
+    @Post("/new")
+    async create(@Body() createUserDto: CreateUserDto) {
+      console.log("api hit")
+      console.log('Received body:', createUserDto);
+      this.usersService.createUser(createUserDto);
+    }
 
-    // @Post()
-    // async create(@Body() createUserDto: CreateUserDto) {
-    //   this.usersService.create(createUserDto);
-    // }
+    @Delete('/:id')
+    async deleteUser(@Param('id') id: string) {
+      console.log('Deleting user with id:', id);
+      return this.usersService.deleteUser(id);
+    }
 }
