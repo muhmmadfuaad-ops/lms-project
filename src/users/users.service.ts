@@ -16,7 +16,7 @@ export class UsersService {
   });
 
   async findAll() {
-    const result = await this.pool.query('SELECT * FROM users');
+    const result = await this.pool.query('SELECT * FROM students');
     return result.rows;
   }
 
@@ -62,16 +62,46 @@ export class UsersService {
 
   async editUser(id: string, user: EditUserDto) {
     try {
-      console.log('user:', user);
-      const { name, email, password, age} = user
-      const result = await this.pool.query(
-        'UPDATE users SET name = $1, email = $2, password = $3, age = $4 WHERE id = $5 RETURNING *',
-        [name, email, password, age, id]  // ✅ Include id as parameter
-      );
+      const fields: string[] = [];  // ✅ explicitly typed
+      const values: any[] = [];
+      let index = 1;
+
+      // Dynamically add only provided fields
+      for (const [key, value] of Object.entries(user)) {
+        if (value !== undefined) {
+          fields.push(`${key} = $${index}`);
+          values.push(value);
+          index++;
+        }
+      }
+
+      // If no fields to update
+      if (fields.length === 0) {
+        return { message: 'No fields provided for update.' };
+      }
+
+      // Add ID as last parameter
+      values.push(id);
+
+      const query = `
+        UPDATE users 
+        SET ${fields.join(', ')} 
+        WHERE id = $${index}
+        RETURNING *;
+      `;
+
+      console.log('Generated SQL:', query);
+
+      const result = await this.pool.query(query, values);
+
       if (result.rowCount === 0) {
         return { message: `No user found with id ${id}` };
       }
-      return { message: `User ${id} updated successfully`, user: result.rows[0] };
+
+      return {
+        message: `User ${id} updated successfully.`,
+        user: result.rows[0],
+      };
     } catch (error) {
       console.error('Error updating user:', error);
       throw error;
