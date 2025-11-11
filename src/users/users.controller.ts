@@ -3,7 +3,9 @@ import { UsersService } from './users.service';
 import { User } from './interfaces/user.interface';
 import { CreateUserDto } from './dto/create-user.dto';
 import { EditUserDto } from './dto/edit-user.dto';
+import { ApiTags, ApiBody, ApiParam } from '@nestjs/swagger';
 
+@ApiTags('Users')
 @Controller('users')
 export class UsersController {
   constructor(private usersService: UsersService) {}
@@ -27,6 +29,23 @@ export class UsersController {
     }
 
     @Put('/update/:id')
+    @ApiParam({
+      name: 'id',
+      required: true,
+      description: 'The ID of the user to update',
+      example: '4',
+    })
+    @ApiBody({
+      description: 'User data to update',
+      schema: {
+        example: {
+          name: 'Muhammad Fuaad Usman',
+          email: 'alice@example.com',
+          password: 'newpassword123',
+          age: 32,
+        },
+      },
+    })
     async updateUser(
       @Param('id') id: string,
       @Body() updateUserDto: CreateUserDto
@@ -37,6 +56,23 @@ export class UsersController {
     }
 
     @Patch('/edit/:id')
+    @ApiParam({
+      name: 'id',
+      required: true,
+      description: 'The ID of the user to update',
+      example: '4',
+    })
+    @ApiBody({
+      description: 'User data to update',
+      schema: {
+        example: {
+          name: 'Muhammad Fuaad Usman',
+          email: 'alice@example.com',
+          password: 'newpassword123',
+          age: 32,
+        },
+      },
+    })
     async editUser(
       @Param('id') id: string,
       @Body() updateUserDto: EditUserDto
