@@ -20,6 +20,27 @@ export class UsersService {
     return result.rows;
   }
 
+  async findStudentByName(name: string) {
+    try {
+      // If no name provided, return all students
+      if (!name) {
+        const result = await this.pool.query('SELECT * FROM students');
+        return result.rows;
+      }
+
+      // If name provided, search case-insensitively
+      const result = await this.pool.query(
+        'SELECT * FROM students WHERE name ILIKE $1',
+        [`%${name}%`]
+      );
+
+      return result.rows;
+    } catch (error) {
+      console.error('Error fetching student by name:', error);
+      throw error;
+    }
+  }
+
   async createUser(user: User) {
     console.log('user:', user)
     const { name, email, password } = user;
