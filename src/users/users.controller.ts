@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Delete, Body, Param, NotFoundException } from '@nestjs/common';
+import { Controller, Get, Post, Delete, Put, Body, Param, NotFoundException } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { User } from './interfaces/user.interface';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -19,9 +19,19 @@ export class UsersController {
       this.usersService.createUser(createUserDto);
     }
 
-    @Delete('/:id')
+    @Delete('/delete/:id')
     async deleteUser(@Param('id') id: string) {
       console.log('Deleting user with id:', id);
       return this.usersService.deleteUser(id);
+    }
+
+    @Put('/update/:id')
+    async updateUser(
+      @Param('id') id: string,
+      @Body() updateUserDto: CreateUserDto
+    ) {
+      console.log('Updating user with id:', id);
+      console.log('Received body:', updateUserDto);
+      return this.usersService.updateUser(id, updateUserDto);
     }
 }

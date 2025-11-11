@@ -42,6 +42,22 @@ export class UsersService {
     }
   }
 
+  async updateUser(id: string, user: User) {
+  try {
+    const { name, email, password, age} = user
+    const result = await this.pool.query(
+      'UPDATE users SET name = $1, email = $2, password = $3 WHERE age = $4 RETURNING *',
+      [name, email, password, age]
+    );
+    if (result.rowCount === 0) {
+      return { message: `No user found with id ${id}` };
+    }
+    return { message: `User ${id} updated successfully`, user: result.rows[0] };
+  } catch (error) {
+    console.error('Error updating user:', error);
+    throw error;
+  }
+}
 
   // create(user: User) {
   //   this.students.push(user);
