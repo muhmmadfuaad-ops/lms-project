@@ -2,6 +2,7 @@
 import { Injectable } from '@nestjs/common';
 import { User } from './interfaces/user.interface';
 import { Pool } from 'pg';
+import { EditUserDto } from './dto/edit-user.dto';
 
 @Injectable()
 export class UsersService {
@@ -43,31 +44,37 @@ export class UsersService {
   }
 
   async updateUser(id: string, user: User) {
-  try {
-    const { name, email, password, age} = user
-    const result = await this.pool.query(
-      'UPDATE users SET name = $1, email = $2, password = $3 WHERE age = $4 RETURNING *',
-      [name, email, password, age]
-    );
-    if (result.rowCount === 0) {
-      return { message: `No user found with id ${id}` };
+    try {
+      const { name, email, password, age} = user
+      const result = await this.pool.query(
+        'UPDATE users SET name = $1, email = $2, password = $3, age = $4 WHERE id = $5 RETURNING *',
+        [name, email, password, age, id]  // ✅ Include id as parameter
+      );
+      if (result.rowCount === 0) {
+        return { message: `No user found with id ${id}` };
+      }
+      return { message: `User ${id} updated successfully`, user: result.rows[0] };
+    } catch (error) {
+      console.error('Error updating user:', error);
+      throw error;
     }
-    return { message: `User ${id} updated successfully`, user: result.rows[0] };
-  } catch (error) {
-    console.error('Error updating user:', error);
-    throw error;
   }
-}
 
-  // create(user: User) {
-  //   this.students.push(user);
-  // }
-
-  // findAll(): User[] {
-  //   return this.students;
-  // }
-
-  // findOne(id: number): User | undefined {
-  //   return this.students.find(u => u.id === id);
-  // }
+  async editUser(id: string, user: EditUserDto) {
+    try {
+      console.log('user:', user);
+      const { name, email, password, age} = user
+      const result = await this.pool.query(
+        'UPDATE users SET name = $1, email = $2, password = $3, age = $4 WHERE id = $5 RETURNING *',
+        [name, email, password, age, id]  // ✅ Include id as parameter
+      );
+      if (result.rowCount === 0) {
+        return { message: `No user found with id ${id}` };
+      }
+      return { message: `User ${id} updated successfully`, user: result.rows[0] };
+    } catch (error) {
+      console.error('Error updating user:', error);
+      throw error;
+    }
+  }
 }
