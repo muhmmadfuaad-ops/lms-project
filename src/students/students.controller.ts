@@ -64,11 +64,14 @@ export class StudentsController {
     description: 'Student data to update',
     schema: {
       example: {
-        name: 'Muhammad Fuaad Usman',
-        email: 'alice@example.com',
-        password: 'newpassword123',
-        age: 32,
-      },
+      "name": "Mike",
+      "email": "mike@example.com",
+      "age": 20,
+      "enrollment_date": "2025-11-11T19:00:00.000Z",
+      "phone_number": "+92-300-1234567",
+      "address": "Karachi, Pakistan",
+      "password": "pass123"
+      }
     },
   })
   async updateStudent(@Param('id') id: string, @Body() updateStudentDto: CreateStudentDto) {
@@ -88,11 +91,14 @@ export class StudentsController {
     description: 'Student data to update',
     schema: {
       example: {
-        name: 'Muhammad Fuaad Usman',
-        email: 'alice@example.com',
-        password: 'newpassword123',
-        age: 32,
-      },
+      "name": "Mike",
+      "email": "mike@example.com",
+      "age": 20,
+      "enrollment_date": "2025-11-11T19:00:00.000Z",
+      "phone_number": "+92-300-1234567",
+      "address": "Karachi, Pakistan",
+      "password": "pass123"
+      }
     },
   })
   async editStudent(@Param('id') id: string, @Body() updateStudentDto: EditStudentDto) {
