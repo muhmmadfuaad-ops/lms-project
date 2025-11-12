@@ -1,9 +1,9 @@
-import { Controller, Get, Post, Delete, Put, Patch, Body, Param } from '@nestjs/common';
+import { Controller, Get, Post, Delete, Put, Patch, Body, Param, Query } from '@nestjs/common';
 import { StudentsService } from './students.service';
 import { Student } from './interfaces/student.interface';
 import { CreateStudentDto } from './dto/create-student.dto';
 import { EditStudentDto } from './dto/edit-student.dto';
-import { ApiTags, ApiBody, ApiParam } from '@nestjs/swagger';
+import { ApiTags, ApiBody, ApiParam, ApiQuery } from '@nestjs/swagger';
 
 @ApiTags('Students')
 @Controller('students')
@@ -13,6 +13,18 @@ export class StudentsController {
   @Get()
   async findAll(): Promise<Student[]> {
     return this.studentsService.findAll();
+  }
+
+  @Get('search')
+  @ApiQuery({
+    name: 'name',
+    required: true,
+    description: 'Student name (fuzzy search, case-insensitive)',
+    example: 'Muhammad',
+  })
+  async searchByName(@Query('name') name: string): Promise<Student[]> {
+    console.log('Searching students by name:', name);
+    return this.studentsService.findStudentByName(name);
   }
 
   @Post('/new')
