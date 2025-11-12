@@ -7,15 +7,16 @@ import { CreateStudentDto } from './dto/create-student.dto';
 @Injectable()
 export class StudentsService {
   private pool = new Pool({
-    host: 'localhost',
-    port: 5432,
-    user: 'postgres',
-    password: 'Alhamdulillah@321',
-    database: 'lms-project',
+    // host: 'postgres-database',
+    host: process.env.DATABASE_HOST,
+    port: process.env.DATABASE_PORT ? parseInt(process.env.DATABASE_PORT) : undefined,
+    user: process.env.DATABASE_USER,
+    password: process.env.DATABASE_PASSWORD,
+    database: process.env.DATABASE_NAME,
   });
 
   async findAll() {
-    const result = await this.pool.query('SELECT * FROM students');
+    const result = await this.pool.query('SELECT * FROM "lms-project".students');
     return result.rows;
   }
 
