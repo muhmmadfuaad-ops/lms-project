@@ -85,7 +85,7 @@ export class StudentsController {
   }
 
   @Delete('/delete/:id')
-  async deleteStudent(@Param('id') id: string) {
+  async deleteStudent(@Param('id') id: number) {
     console.log('Deleting student with id:', id);
     return this.studentsService.deleteStudent(id);
   }
