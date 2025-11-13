@@ -13,12 +13,15 @@ export class AuthController {
     description: 'Student creation payload',
     schema: {
       example: {
-        name: 'Muhammad Fuaad Usman',
-        password: 'securePass123',
+        "name": "Ali Khan",
+        "password": "password123"
       },
     },
   })
-  signIn(@Body() signInDto: Record<string, any>) {
-    return this.authService.signIn(signInDto.username, signInDto.password);
+  signIn(@Body() signInDto: Record<string, string>) {
+    console.log('signIn controller triggered')
+    console.log('signInDto:', signInDto)
+
+    return this.authService.signIn(signInDto.name, signInDto.password);
   }
 }

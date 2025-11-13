@@ -16,7 +16,7 @@ export class StudentsService {
   async findStudentById(id: number) {
     try {
       const result = await this.pool.query(
-        'SELECT * FROM students WHERE id = $1',
+        'SELECT * FROM "lms-project".students WHERE id = $1',
         [id]
       );
 
@@ -30,7 +30,7 @@ export class StudentsService {
   async findStudentByName(name: string) {
     try {
       if (!name) {
-        const result = await this.pool.query('SELECT * FROM students');
+        const result = await this.pool.query('SELECT * FROM "lms-project".students');
         return result.rows;
       }
 
