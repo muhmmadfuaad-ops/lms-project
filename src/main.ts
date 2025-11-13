@@ -10,17 +10,7 @@ async function bootstrap() {
     .setTitle('LMS Project API')            // Title of your docs
     .setDescription('API documentation for the LMS backend')
     .setVersion('1.0')
-    .addBearerAuth(
-      {
-        type: 'http',
-        scheme: 'bearer',
-        bearerFormat: 'JWT',
-        name: 'Authorization',
-        description: 'Enter JWT token (without "Bearer" prefix)',
-        in: 'header',
-      },
-      'access-token', // this name will be used later in decorators
-    )
+    .addBearerAuth()
     .addTag('users')                        // Optional grouping tag
     .build();
 

@@ -12,6 +12,22 @@ import { NotFoundException } from '@nestjs/common';
 export class StudentsController {
   constructor(private studentsService: StudentsService) {}
 
+  /**
+   * Helper method to check if user has access to a specific student resource
+   * @param tokenUserId - User ID from JWT token
+   * @param tokenRole - User role from JWT token
+   * @param resourceId - The student ID being accessed
+   * @throws ForbiddenException if user lacks permission
+   */
+  private checkOwnershipOrAdmin(tokenUserId: number, tokenRole: string | undefined, resourceId: number): void {
+    const isOwner = Number.isFinite(tokenUserId) && tokenUserId === resourceId;
+    const isAdmin = tokenRole === 'admin';
+
+    if (!isOwner && !isAdmin) {
+      throw new ForbiddenException('You are not allowed to access this resource');
+    }
+  }
+
   // get all students
   @Get()
   async findAll(): Promise<Student[]> {
@@ -35,7 +51,7 @@ export class StudentsController {
 
   @Get(':id')
   @UseGuards(JwtAuthGuard)
-  @ApiBearerAuth('access-token')
+  @ApiBearerAuth()
   @ApiParam({
     name: 'id',
     required: true,
@@ -48,14 +64,12 @@ export class StudentsController {
       throw new NotFoundException(`Invalid id: ${id}`);
     }
 
-    // Extract user id from JWT payload (common fields: id, sub)
+    // Extract user id and role from JWT payload
     const tokenUserId = Number(req.user?.id ?? req.user?.sub ?? req.user?.userId);
     const tokenRole = req.user?.role;
 
-    // Allow if token owner matches requested id or user has admin role
-    if (!(Number.isFinite(tokenUserId) && tokenUserId === numericId) && tokenRole !== 'admin') {
-      throw new ForbiddenException('You are not allowed to access this resource');
-    }
+    // Check authorization using reusable helper
+    this.checkOwnershipOrAdmin(tokenUserId, tokenRole, numericId);
 
     const rows = await this.studentsService.findStudentById(numericId);
     if (!rows || rows.length === 0) {
@@ -85,9 +99,30 @@ export class StudentsController {
   }
 
   @Delete('/delete/:id')
-  async deleteStudent(@Param('id') id: string) {
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth('access-token')
+  @ApiParam({
+    name: 'id',
+    required: true,
+    description: 'The ID of the student to delete',
+    example: '4',
+  })
+  async deleteStudent(@Param('id') id: string, @Req() req: any) {
+    console.log('Received delete request for id:', id);
+    const numericId = Number(id);
+    if (Number.isNaN(numericId)) {
+      throw new NotFoundException(`Invalid id: ${id}`);
+    }
+
+    // Extract user id and role from JWT payload
+    const tokenUserId = Number(req.user?.id ?? req.user?.sub ?? req.user?.userId);
+    const tokenRole = req.user?.role;
+
+    // Check authorization using reusable helper
+    this.checkOwnershipOrAdmin(tokenUserId, tokenRole, numericId);
+
     console.log('Deleting student with id:', id);
-    return this.studentsService.deleteStudent(id);
+    return this.studentsService.deleteStudent(numericId);
   }
 
   @Put('/update/:id')

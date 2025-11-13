@@ -53,7 +53,7 @@ export class StudentsService {
     return result.rows[0];
   }
 
-  async deleteStudent(id: string) {
+  async deleteStudent(id: number) {
     try {
       const result = await this.pool.query('DELETE FROM students WHERE id = $1', [id]);
       if (result.rowCount === 0) {
