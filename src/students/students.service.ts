@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Inject } from '@nestjs/common';
 import { Student } from './interfaces/student.interface';
 import { Pool } from 'pg';
 import { EditStudentDto } from './dto/edit-student.dto';
@@ -6,18 +6,34 @@ import { CreateStudentDto } from './dto/create-student.dto';
 
 @Injectable()
 export class StudentsService {
-  private pool = new Pool({
-    // host: 'postgres-database',
-    host: process.env.DATABASE_HOST,
-    port: process.env.DATABASE_PORT ? parseInt(process.env.DATABASE_PORT) : undefined,
-    user: process.env.DATABASE_USER,
-    password: process.env.DATABASE_PASSWORD,
-    database: process.env.DATABASE_NAME,
-  });
+  // private pool = new Pool({
+  //   // host: 'postgres-database',
+  //   host: process.env.DATABASE_HOST,
+  //   port: process.env.DATABASE_PORT ? parseInt(process.env.DATABASE_PORT) : undefined,
+  //   user: process.env.DATABASE_USER,
+  //   password: process.env.DATABASE_PASSWORD,
+  //   database: process.env.DATABASE_NAME,
+  // });
+
+  constructor(@Inject('PG_POOL') private pool: Pool) {}
 
   async findAll() {
     const result = await this.pool.query('SELECT * FROM "lms-project".students');
     return result.rows;
+  }
+
+  async findStudentById(id: number) {
+    try {
+      const result = await this.pool.query(
+        'SELECT * FROM students WHERE id = $1',
+        [id]
+      );
+
+      return result.rows;
+    } catch (error) {
+      console.error('Error fetching student by id:', error);
+      throw error;
+    }
   }
 
   async findStudentByName(name: string) {

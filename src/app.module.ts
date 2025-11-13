@@ -5,12 +5,14 @@ import { UsersController } from './users/users.controller';
 import { UsersModule } from './users/users.module';
 import { StudentsModule } from './students/students.module';
 import { ConfigModule } from '@nestjs/config';
+import { AuthModule } from './auth/auth.module';
+import { DatabaseModule } from './database/database.module';
 
 @Module({
   imports: [ConfigModule.forRoot({
       isGlobal: true, // Makes ConfigService available globally
       envFilePath: '.env', // Path to your .env file
-    }), UsersModule, StudentsModule],
+    }), UsersModule, StudentsModule, AuthModule, DatabaseModule],
   controllers: [AppController],
   providers: [AppService],
 })
