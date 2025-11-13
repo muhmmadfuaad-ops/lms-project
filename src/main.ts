@@ -21,7 +21,6 @@ async function bootstrap() {
       },
       'access-token', // this name will be used later in decorators
     )
-    .addTag('users')                        // Optional grouping tag
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
