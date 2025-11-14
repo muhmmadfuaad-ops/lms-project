@@ -73,9 +73,24 @@ export class StudentsService {
     return result.rows[0];
   }
 
-  async deleteStudent(id: number) {
+  async deleteStudent(id: number, req) {
     try {
-      const result = await this.pool.query('DELETE FROM students WHERE id = $1', [id]);
+      if (Number.isNaN(id)) {
+        throw new NotFoundException(`Invalid id: ${id}`);
+      }
+
+      // Extract user id from JWT payload (common fields: id, sub)
+      const tokenUserId = Number(req.user?.id);
+      const tokenRole = req.user?.role;
+
+      // console.log('tokenUserId:', tokenUserId);
+
+      // Allow if token owner matches requested id or user has admin role
+      if (!(Number.isFinite(tokenUserId) && tokenUserId === id) && tokenRole !== 'admin') {
+        throw new ForbiddenException('You are not allowed to delete this resource');
+      }
+
+      const result = await this.pool.query('DELETE FROM "lms-project".students WHERE id = $1', [id]);
       if (result.rowCount === 0) {
         return { message: `No student found with id ${id}` };
       }

@@ -68,9 +68,11 @@ export class StudentsController {
   }
 
   @Delete('/delete/:id')
-  async deleteStudent(@Param('id') id: number) {
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  async deleteStudent(@Param('id', ParseIntPipe) id: number, @Req() req: any) {
     console.log('Deleting student with id:', id);
-    return this.studentsService.deleteStudent(id);
+    return this.studentsService.deleteStudent(id, req);
   }
 
   @Put('/update/:id')
