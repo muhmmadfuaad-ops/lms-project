@@ -6,6 +6,7 @@ import { EditStudentDto } from './dto/edit-student.dto';
 import { ApiTags, ApiBody, ApiParam, ApiQuery, ApiBearerAuth, ApiUnauthorizedResponse } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { NotFoundException } from '@nestjs/common';
+import { OwnershipGuard } from '../auth/ownership.guard';
 
 // @ApiTags('Students')
 @Controller('students')
@@ -68,7 +69,7 @@ export class StudentsController {
   }
 
   @Delete('/delete/:id')
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, OwnershipGuard)
   @ApiBearerAuth()
   async deleteStudent(@Param('id', ParseIntPipe) id: number, @Req() req: any) {
     console.log('Deleting student with id:', id);
