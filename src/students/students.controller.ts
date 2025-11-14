@@ -16,9 +16,22 @@ export class StudentsController {
   async createStudent(@Body() studentDto: CreateStudentDto): Promise<Student[]> {
     return this.studentsService.createStudent(studentDto);
   }
+
   // get all students
+  // @Get()
+  // @UseGuards(JwtAuthGuard, OwnershipGuard)
+  // @ApiBearerAuth()
+  // async findAll(@Req() req): Promise<Student[]> {
+  //   return this.studentsService.findAll();
+  // }
+
   @Get()
-  async findAll(): Promise<Student[]> {
+  @UseGuards(JwtAuthGuard, OwnershipGuard)
+  @ApiBearerAuth()
+  async findAll(@Req() req: any): Promise<Student[]> {
+    console.log('JWT payload:', req.user);                  // decoded token
+    console.log('Raw token:', req.headers.authorization);   // Bearer <token>
+
     return this.studentsService.findAll();
   }
 

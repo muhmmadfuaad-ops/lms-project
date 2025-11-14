@@ -31,7 +31,7 @@ export class AuthService {
     }
 
     // ✅ Generate JWT token
-    const payload = { id: student.id, name: student.name, email: student.email };
+    const payload = { id: student.id, name: student.name, email: student.email, role: student.role };
     const secret = process.env.JWT_SECRET || 'defaultSecret';
     const token = jwt.sign(payload, secret, { expiresIn: '1h' });
     // console.log('token:', token);

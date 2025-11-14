@@ -4,6 +4,9 @@ import { AuthGuard } from '@nestjs/passport';
 @Injectable()
 export class JwtAuthGuard extends AuthGuard('jwt') {
   handleRequest(err, user, info) {
+    console.log('user:', user)
+    console.log('err:', err)
+    console.log('info:', info)
     if (err || !user) {
       throw new UnauthorizedException('Please sign in to access this resource.');
     }

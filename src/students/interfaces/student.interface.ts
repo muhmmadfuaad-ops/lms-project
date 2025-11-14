@@ -1,7 +1,10 @@
+import { Role } from '../enums/role.enum';
+
 export interface Student {
   id: number;
   name: string;
   email: string;
+  role: Role;
   // Optional fields
   password?: string;
   age?: number | null;

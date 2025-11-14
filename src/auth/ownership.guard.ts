@@ -13,7 +13,8 @@ export class OwnershipGuard implements CanActivate {
     const user = request.user;
     const id = Number(request.params.id);
 
-    if (Number.isNaN(id)) {
+    if (Number.isNaN(id) && user.role !== 'admin') {
+      console.log('user:', user)
       throw new ForbiddenException(`Invalid id: ${id}`);
     }
 

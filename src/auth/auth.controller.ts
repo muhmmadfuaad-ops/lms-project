@@ -13,8 +13,8 @@ export class AuthController {
     description: 'Student creation payload',
     schema: {
       example: {
-        "name": "Ali Khan",
-        "password": "password123"
+        "name": "Jennifer",
+        "password": "strongPassword123"
       },
     },
   })
