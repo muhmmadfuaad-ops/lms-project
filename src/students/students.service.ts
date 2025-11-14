@@ -65,10 +65,10 @@ export class StudentsService {
 
   async createStudent(student: CreateStudentDto) {
     console.log('student:', student);
-    const { name, email, password, age, phone_number, address } = student;
+    const { name, username, email, password, age, phone_number, address } = student;
     const result = await this.pool.query(
-      'INSERT INTO students (name, email, password, age, phone_number, address) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *',
-      [name, email, password, age, phone_number, address],
+      'INSERT INTO students (name, username, email, password, age, phone_number, address) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *',
+      [name, username, email, password, age, phone_number, address],
     );
     return result.rows[0];
   }
@@ -103,10 +103,10 @@ export class StudentsService {
 
   async updateStudent(id: string, student: CreateStudentDto) {
     try {
-      const { name, email, password, age } = student;
+      const { name, username, email, password, age, phone_number, address } = student;
       const result = await this.pool.query(
-        'UPDATE students SET name = $1, email = $2, password = $3, age = $4 WHERE id = $5 RETURNING *',
-        [name, email, password, age, id],
+        'UPDATE students SET name = $1, username = $2, email = $3, password = $4, age = $5, phone_number = $6, address = $7 WHERE id = $8 RETURNING *',
+        [name, username, email, password, age, phone_number, address, id],
       );
       if (result.rowCount === 0) {
         return { message: `No student found with id ${id}` };

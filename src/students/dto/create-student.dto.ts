@@ -2,10 +2,16 @@ import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateStudentDto {
   @ApiProperty({
-    example: 'John Doe',
+    example: 'Muhammad Ali',
     description: 'Full name of the student',
   })
   name: string;
+
+  @ApiProperty({
+    example: 'ali',
+    description: 'Username of the student',
+  })
+  username: string;
 
   @ApiProperty({
     example: 'john@example.com',
@@ -26,7 +32,7 @@ export class CreateStudentDto {
     description: 'Age of the student (optional)',
     required: false,
   })
-  age?: number;
+  age: number;
 
   @ApiProperty({
     example: '+923001234567',
@@ -40,7 +46,7 @@ export class CreateStudentDto {
     description: 'Home address (optional)',
     required: false,
   })
-  address?: string;
+  address: string;
 
   @ApiProperty({
     example: '2025-01-10',

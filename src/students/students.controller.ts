@@ -70,6 +70,7 @@ export class StudentsController {
     schema: {
       example: {
         name: 'Muhammad Fuaad Usman',
+        username: 'fuaad_usman',
         email: 'alice@example.com',
         password: 'securePass123',
         age: 21,
@@ -104,6 +105,7 @@ export class StudentsController {
     schema: {
       example: {
       "name": "Mike",
+      "username": "mike_user",
       "email": "mike@example.com",
       "age": 20,
       "enrollment_date": "2025-11-11T19:00:00.000Z",
@@ -131,6 +133,7 @@ export class StudentsController {
     schema: {
       example: {
       "name": "Mike",
+      "username": "mike_user",
       "email": "mike@example.com",
       "age": 20,
       "enrollment_date": "2025-11-11T19:00:00.000Z",
