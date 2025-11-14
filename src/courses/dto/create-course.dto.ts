@@ -23,7 +23,7 @@ export class CreateCourseDto {
 
   @ApiProperty({
     description: 'Price of the course',
-    example: 199.99,
+    example: 199,
   })
   price: number;
 

@@ -28,5 +28,4 @@ export class CoursesController {
 
     return this.coursesService.findAllCourses();
   }
-
 }
