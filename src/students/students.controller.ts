@@ -50,10 +50,10 @@ export class StudentsController {
     }
 
     // Extract user id from JWT payload (common fields: id, sub)
-    const tokenUserId = Number(req.user?.id ?? req.user?.sub ?? req.user?.userId);
+    const tokenUserId = Number(req.user?.id);
     const tokenRole = req.user?.role;
 
-    console.log('tokenUserId:', tokenUserId);
+    // console.log('tokenUserId:', tokenUserId);
 
     // Allow if token owner matches requested id or user has admin role
     if (!(Number.isFinite(tokenUserId) && tokenUserId === id) && tokenRole !== 'admin') {
