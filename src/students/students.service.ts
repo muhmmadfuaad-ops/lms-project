@@ -9,7 +9,7 @@ export class StudentsService {
   constructor(@Inject('databaseService') private pool: Pool) {}
 
   async findAllStudents() {
-    const result = await this.pool.query('SELECT * FROM "lms-project".students');
+    const result = await this.pool.query('SELECT * FROM students');
     return result.rows;
   }
 
@@ -31,7 +31,7 @@ export class StudentsService {
       }
 
       const result = await this.pool.query(
-        'SELECT * FROM "lms-project".students WHERE id = $1',
+        'SELECT * FROM students WHERE id = $1',
         [id]
       );
 
@@ -50,7 +50,7 @@ export class StudentsService {
   async findStudentByName(name: string) {
     try {
       if (!name) {
-        const result = await this.pool.query('SELECT * FROM "lms-project".students');
+        const result = await this.pool.query('SELECT * FROM students');
         return result.rows;
       }
 
@@ -67,7 +67,7 @@ export class StudentsService {
     console.log('student:', student);
     const { name, email, password, age, phone_number, address } = student;
     const result = await this.pool.query(
-      'INSERT INTO "lms-project".students (name, email, password, age, phone_number, address) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *',
+      'INSERT INTO students (name, email, password, age, phone_number, address) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *',
       [name, email, password, age, phone_number, address],
     );
     return result.rows[0];
@@ -90,7 +90,7 @@ export class StudentsService {
         throw new ForbiddenException('You are not allowed to delete this resource');
       }
 
-      const result = await this.pool.query('DELETE FROM "lms-project".students WHERE id = $1', [id]);
+      const result = await this.pool.query('DELETE FROM students WHERE id = $1', [id]);
       if (result.rowCount === 0) {
         return { message: `No student found with id ${id}` };
       }

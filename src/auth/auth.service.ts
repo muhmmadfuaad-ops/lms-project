@@ -17,7 +17,7 @@ export class AuthService {
     // console.log('name:', name)
     // console.log('password:', password)
 
-    const result: QueryResult<Student>   = await this.pool.query('SELECT * FROM "lms-project".students WHERE name = $1', [name]);
+    const result: QueryResult<Student>   = await this.pool.query('SELECT * FROM students WHERE name = $1', [name]);
 
     if (result.rows.length == 0) {
       throw new UnauthorizedException('No student exists with this name');

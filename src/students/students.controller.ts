@@ -26,7 +26,7 @@ export class StudentsController {
   // }
 
   @Get()
-  @UseGuards(JwtAuthGuard, OwnershipGuard)
+  // @UseGuards(JwtAuthGuard, OwnershipGuard)
   @ApiBearerAuth()
   async findAllStudents(@Req() req: any): Promise<Student[]> {
     console.log('JWT payload:', req.user);                  // decoded token
