@@ -67,7 +67,7 @@ export class StudentsService {
     console.log('student:', student);
     const { name, email, password, age, phone_number, address } = student;
     const result = await this.pool.query(
-      'INSERT INTO students (name, email, password, age, phone_number, address) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *',
+      'INSERT INTO "lms-project".students (name, email, password, age, phone_number, address) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *',
       [name, email, password, age, phone_number, address],
     );
     return result.rows[0];

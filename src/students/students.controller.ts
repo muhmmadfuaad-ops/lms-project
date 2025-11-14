@@ -8,11 +8,14 @@ import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { NotFoundException } from '@nestjs/common';
 import { OwnershipGuard } from '../auth/ownership.guard';
 
-// @ApiTags('Students')
 @Controller('students')
 export class StudentsController {
   constructor(private studentsService: StudentsService) {}
 
+  @Post('/register')
+  async createStudent(@Body() studentDto: CreateStudentDto): Promise<Student[]> {
+    return this.studentsService.createStudent(studentDto);
+  }
   // get all students
   @Get()
   async findAll(): Promise<Student[]> {
