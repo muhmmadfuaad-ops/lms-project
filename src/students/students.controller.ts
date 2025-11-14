@@ -44,27 +44,7 @@ export class StudentsController {
     example: '4',
   })
   async findStudentById(@Param('id', ParseIntPipe) id: number, @Req() req: any): Promise<Student> {
-    // const numericId = Number(id);
-    if (Number.isNaN(id)) {
-      throw new NotFoundException(`Invalid id: ${id}`);
-    }
-
-    // Extract user id from JWT payload (common fields: id, sub)
-    const tokenUserId = Number(req.user?.id);
-    const tokenRole = req.user?.role;
-
-    // console.log('tokenUserId:', tokenUserId);
-
-    // Allow if token owner matches requested id or user has admin role
-    if (!(Number.isFinite(tokenUserId) && tokenUserId === id) && tokenRole !== 'admin') {
-      throw new ForbiddenException('You are not allowed to access this resource');
-    }
-
-    const rows = await this.studentsService.findStudentById(id);
-    if (!rows || rows.length === 0) {
-      throw new NotFoundException(`Student with id ${id} not found`);
-    }
-    return rows[0];
+    return await this.studentsService.findStudentById(id, req);
   }
 
   @Post('/new')

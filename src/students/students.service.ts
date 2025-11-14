@@ -1,4 +1,4 @@
-import { Injectable, Inject } from '@nestjs/common';
+import { Injectable, Inject, NotFoundException, ForbiddenException } from '@nestjs/common';
 import { Student } from './interfaces/student.interface';
 import { Pool } from 'pg';
 import { EditStudentDto } from './dto/edit-student.dto';
@@ -13,14 +13,34 @@ export class StudentsService {
     return result.rows;
   }
 
-  async findStudentById(id: number) {
+  async findStudentById(id: number, req) {
     try {
+      if (Number.isNaN(id)) {
+        throw new NotFoundException(`Invalid id: ${id}`);
+      }
+
+      // Extract user id from JWT payload (common fields: id, sub)
+      const tokenUserId = Number(req.user?.id);
+      const tokenRole = req.user?.role;
+
+      // console.log('tokenUserId:', tokenUserId);
+
+      // Allow if token owner matches requested id or user has admin role
+      if (!(Number.isFinite(tokenUserId) && tokenUserId === id) && tokenRole !== 'admin') {
+        throw new ForbiddenException('You are not allowed to access this resource');
+      }
+
       const result = await this.pool.query(
         'SELECT * FROM "lms-project".students WHERE id = $1',
         [id]
       );
 
-      return result.rows;
+      const rows = result.rows;
+      if (!rows || rows.length === 0) {
+        throw new NotFoundException(`Student with id ${id} not found`);
+      }
+      return rows[0];
+
     } catch (error) {
       console.error('Error fetching student by id:', error);
       throw error;
