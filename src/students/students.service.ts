@@ -8,7 +8,7 @@ import { CreateStudentDto } from './dto/create-student.dto';
 export class StudentsService {
   constructor(@Inject('databaseService') private pool: Pool) {}
 
-  async findAll() {
+  async findAllStudents() {
     const result = await this.pool.query('SELECT * FROM "lms-project".students');
     return result.rows;
   }

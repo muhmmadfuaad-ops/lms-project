@@ -6,12 +6,13 @@ import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
 import { DatabaseModule } from './database/database.module';
 import { JwtAuthGuard } from './auth/jwt-auth.guard';
+import { CoursesModule } from './courses/courses.module';
 
 @Module({
   imports: [ConfigModule.forRoot({
       isGlobal: true, // Makes ConfigService available globally
       envFilePath: '.env', // Path to your .env file
-    }), StudentsModule, AuthModule, DatabaseModule],
+    }), StudentsModule, AuthModule, DatabaseModule, CoursesModule],
   controllers: [AppController],
   providers: [AppService, JwtAuthGuard],
 })

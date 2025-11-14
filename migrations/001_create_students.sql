@@ -1,3 +1,5 @@
+CREATE TYPE role AS ENUM ('student', 'admin');
+
 CREATE TABLE students (
   id SERIAL PRIMARY KEY,
   name VARCHAR(100) NOT NULL,
@@ -7,4 +9,5 @@ CREATE TABLE students (
   phone_number VARCHAR(20),
   address TEXT,
   password VARCHAR(255);
+  role role NOT NULL DEFAULT 'student'
 );
